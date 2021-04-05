@@ -1,0 +1,189 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> destination;
+
+float4x4 cameraToWorld;
+float4x4 cameraInverseProjection;
+float3 viewDirection;
+float3 lightDirection;
+
+float power;
+float fogDistance;
+float lightIntensity;
+float4 backgroundColor;
+float4 glowColor;
+float4 lightColor;
+float4 ambientColor;
+Texture2D diffuseColorGradient;
+SamplerState samplerdiffuseColorGradient;
+float4 specularColor;
+float shininess;
+float shadowMin;
+float shadowDistance;
+int aoStepLimit;
+
+static const float epsilon = 0.001f;
+static const float maxDistance = 5;
+static const int maxSteps = 250;
+
+struct Ray
+{
+    float3 origin;
+    float3 direction;
+};
+
+
+Ray CreateRay(float3 origin, float3 direction)
+{
+    Ray ray;
+    ray.origin = origin;
+    ray.direction = direction;
+    return ray;
+}
+
+Ray CreateCameraRay(float2 uv)
+{
+    float3 origin = mul(cameraToWorld, float4(0, 0, 0, 1)).xyz;
+    float3 direction = mul(cameraInverseProjection, float4(uv, 0, 1)).xyz;
+    direction = mul(cameraToWorld, float4(direction, 0)).xyz;
+    direction = normalize(direction);
+    return CreateRay(origin, direction);
+}
+
+// Mandelbulb distanceFromSurface estimation:
+// http://blog.hvidtfeldts.net/index.php/2011/09/distanceFromSurface-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
+float2 DistanceEstimate(float3 pos)
+{
+    float3 z = pos;
+	float dr = 1.0;
+	float r = 0.0;
+    int iterations = 0;
+	for(int i = 0; i < 15; i++)
+    {
+        iterations = i;
+		r = length(z);
+		if(r > 2)
+        {
+            break;
+        }
+		// convert to polar coordinates
+		float theta = acos(z.z / r);
+		float phi = atan2(z.y, z.x);
+		dr =  pow(r, power - 1.0) * power * dr + 1.0;
+		// scale and rotate the point
+		float zr = pow(r, power);
+		theta = theta * power;
+		phi = phi * power;
+		// convert back to cartesian coordinates
+		z = zr * float3(sin(theta) * cos(phi), sin(phi) * sin(theta), cos(theta));
+		z += pos;
+	}
+    float distanceFromSurface = 0.5 * log(r) * r / dr;
+	return float2(iterations, distanceFromSurface);
+}
+
+float3 EstimateNormal(float3 pos)
+{
+    float x = DistanceEstimate(float3(pos.x + epsilon, pos.y, pos.z)).y - DistanceEstimate(float3(pos.x - epsilon, pos.y, pos.z)).y;
+    float y = DistanceEstimate(float3(pos.x, pos.y + epsilon, pos.z)).y - DistanceEstimate(float3(pos.x, pos.y - epsilon, pos.z)).y;
+    float z = DistanceEstimate(float3(pos.x, pos.y, pos.z + epsilon)).y - DistanceEstimate(float3(pos.x, pos.y, pos.z - epsilon)).y;
+    return normalize(float3(x, y, z));
+}
+
+float4 BlinnPhongLighting(float3 normal, float iterations)
+{
+    float lambertian = saturate(dot(normal, -lightDirection));
+    float specular = 0.0;
+    if(lambertian > 0.0)
+    {
+        float3 halfDir = normalize(viewDirection - lightDirection);
+        float specAngle = saturate(dot(halfDir, normal));
+        specular = pow(specAngle, shininess);
+    }
+    float4 diffuseColor = diffuseColorGradient.SampleLevel(samplerdiffuseColorGradient, float2(saturate(iterations / 15.0), 0.0), 0);
+    float4 color = ambientColor + diffuseColor * lambertian * lightColor * lightIntensity +
+                                  specularColor * specular * lightColor * lightIntensity;
+    return float4(color.rgb, 1);
+}
+
+float SoftShadow(Ray ray)
+{
+    float shadowAmount = 0;
+    float totalRayDistance = 0;
+    int steps = 0;
+    float smallestDistanceFromSurface = 100;
+    bool hitSurface = false;
+    while (totalRayDistance < maxDistance && steps < maxSteps)
+    {
+        steps++;
+        float2 sceneInfo = DistanceEstimate(ray.origin);
+        float distanceFromSurface = sceneInfo.y;
+        if(distanceFromSurface < smallestDistanceFromSurface)
+        {
+            smallestDistanceFromSurface = distanceFromSurface;
+        }
+        if (distanceFromSurface <= epsilon)
+        {
+            hitSurface = true;
+            shadowAmount = 1;
+            break;
+        }
+        ray.origin += ray.direction * distanceFromSurface;
+        totalRayDistance += distanceFromSurface;
+    }
+    if(hitSurface == false)
+    {
+        shadowAmount = 1 - saturate(smallestDistanceFromSurface / shadowDistance);
+    }
+    return 1 - shadowAmount;
+}
+
+
+[numthreads(8,8,1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    // UVs
+    uint width, height;
+    destination.GetDimensions(width, height);
+    float2 uv = id.xy / float2(width, height);
+    // Background color
+    float4 color = backgroundColor;
+    // Raymarching
+    Ray ray = CreateCameraRay(uv * 2 - 1);
+    float totalRayDistance = 0;
+    int steps = 0;
+    bool hitSurface = false;
+    while(totalRayDistance < maxDistance && steps < maxSteps)
+    {
+        steps++;
+        float2 sceneInfo = DistanceEstimate(ray.origin);
+        float distanceFromSurface = sceneInfo.y;
+        // Ray has hit a surface, Color surface
+        if(distanceFromSurface <= epsilon)
+        {
+            hitSurface = true;
+            // Normal
+            float3 normal = EstimateNormal(ray.origin - ray.direction * epsilon * 2);
+            // Diffuse & Specular lighting
+            color = BlinnPhongLighting(normal, sceneInfo.x);
+            // Ambient occlusion
+            float aoMultiplier = 1.0 - saturate(float(steps) / float(aoStepLimit));
+            color *= aoMultiplier;
+            // Soft shadows
+            Ray shadowRay = CreateRay(ray.origin - ray.direction * epsilon * 2, -lightDirection);
+            color *= SoftShadow(shadowRay) + shadowMin;
+            // Fog
+            float4 fogColor = lerp(backgroundColor, glowColor, 0.5);
+            color = lerp(color, fogColor, saturate(totalRayDistance / fogDistance));
+            break;
+        }
+        ray.origin += ray.direction * distanceFromSurface;
+        totalRayDistance += distanceFromSurface;
+    }
+    if(hitSurface == false)
+    {
+        // Glow/Edge lighting
+        color = lerp(color, glowColor, float(steps) / float(maxSteps));
+    }
+    destination[id.xy] = float4(color.rgb, 1);
+}
