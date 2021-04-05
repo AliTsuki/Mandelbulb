@@ -3,6 +3,7 @@
 A unity project that displays an image to the screen using a compute shader to ray-march a mandelbulb.
 
 References:
+
 https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm
 https://iquilezles.org/www/articles/mandelbulb/mandelbulb.htm
 http://blog.hvidtfeldts.net/index.php/2011/06/distance-estimated-3d-fractals-part-i/
