@@ -599,8 +599,8 @@ MonoBehaviour:
   Paused: 1
   PowerChangeSpeed: 0.12
   PowerChangeSensitivity: 0.001
-  DefaultMoveSpeed: 0.1
-  SprintMultiplier: 10
+  DefaultMoveSpeed: 0.2
+  SprintMultiplier: 5
   Speed: 0
   MouseSensitivity: 0.8
   RecordInputs: 1
@@ -886,7 +886,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1710,22 +1710,22 @@ MonoBehaviour:
   MainLight: {fileID: 170076734}
   Screen: {fileID: 345716371}
   FractalPower: 1
-  Epsilon: 0.0001
+  Epsilon: 0.001
   MaxDistance: 5
-  MaxSteps: 500
+  MaxSteps: 250
   FogDistance: 3
   LightIntensity: 7
   BackgroundColor: {r: 0.019607844, g: 0.019607844, b: 0.019607844, a: 0}
   GlowColor: {r: 0, g: 0.063, b: 0.06125001, a: 0}
   LightColor: {r: 1, g: 1, b: 1, a: 0}
-  AmbientColorChannel: 0
-  AmbientColorRotationAmount: 0.5
-  AmbientColorMaxChannelAmount: 1
+  AmbientColorChannel: 1
+  AmbientColorRotationAmount: 0.25
+  AmbientColorMaxChannelAmount: 0.5
   AmbientColor: {r: 0, g: 0, b: 0, a: 1}
   DiffuseColorGradient: {fileID: 2800000, guid: b64e0439a1cc621438bf9aef38ca0220, type: 3}
   SpecularColor: {r: 1, g: 1, b: 1, a: 0}
   Shininess: 10
   ShadowMin: 0.1
   ShadowDistance: 0.002
-  AOStepLimit: 60
-  GlowStepLimit: 60
+  AOStepLimit: 100
+  GlowStepLimit: 100

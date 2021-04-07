@@ -25,7 +25,7 @@ public class RaymarchController : MonoBehaviour
 
     [Range(1f, 30f), Tooltip("The fractal power. Higher values result in more self similar looking surface.")]
     public float FractalPower = 1f;
-    [Range(0.0001f, 0.1f), Tooltip("The small number to use as how close to try to get to the surface for each ray. Smaller number results in more surface detail at the expense of more render time.")]
+    [Range(0.0001f, 0.001f), Tooltip("The small number to use as how close to try to get to the surface for each ray. Smaller number results in more surface detail at the expense of more render time.")]
     public float Epsilon = 0.0001f;
     [Range(1f, 10f), Tooltip("The maximum distance to send a ray. Surfaces beyond this distance will not be rendered.")]
     public float MaxDistance = 5f;
