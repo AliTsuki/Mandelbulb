@@ -30,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "TogglePower",
+                    "name": "TogglePowerAddition",
                     "type": "Button",
                     "id": "fab8df28-5745-4416-bbf7-fdb0030b35d2",
                     "expectedControlType": "Button",
@@ -38,10 +38,34 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Acceleration",
+                    "name": "ChangePowerAddRate",
                     "type": "Value",
                     "id": "f1709c36-4c46-4a5a-ad3f-0ebdba537a96",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ResetSpeed",
+                    "type": "Button",
+                    "id": "01203ed0-12d2-4da7-a236-e63436460a7a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ResetPower",
+                    "type": "Button",
+                    "id": "232e74db-7104-44db-9136-6d4ba69e51b6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ToggleUI",
+                    "type": "Button",
+                    "id": "b0bcab30-0635-4317-a1ff-a94e02011860",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -136,7 +160,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "TogglePower",
+                    "action": "TogglePowerAddition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -147,7 +171,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Acceleration",
+                    "action": "ChangePowerAddRate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -181,6 +205,39 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "DEBUGUNHOOKINPUT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea54552f-1e98-4ab2-aaad-f7e17364cec4",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ResetSpeed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c828be2b-606e-4ae0-996c-d70a6c1c98af",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ResetPower",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "72f052f8-bd03-4350-9717-ebfe7cb419c5",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

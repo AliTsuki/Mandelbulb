@@ -3,29 +3,43 @@ using UnityEngine.UI;
 
 
 /// <summary>
-/// 
+/// The controller that sends data to the raymarch compute shader.
 /// </summary>
 public class RaymarchController : MonoBehaviour
 {
+    /// <summary>
+    /// The singleton instance of the raymarch controller.
+    /// </summary>
     public static RaymarchController Instance;
 
+    [Tooltip("The compute shader for rendering.")]
     public ComputeShader RaymarchShader;
+    [Tooltip("The render texture to contain rendered image.")]
     public RenderTexture RenderTex;
+    [Tooltip("The main camera used for position/rotation data in rendering image.")]
     public Camera Cam;
+    [Tooltip("The main light source used for directional lighting.")]
     public Light MainLight;
+    [Tooltip("The raw image UI component to contain the rendered image.")]
     public RawImage Screen;
 
-    [Range(1f, 30f)]
+    [Range(1f, 30f), Tooltip("The fractal power. Higher values result in more self similar looking surface.")]
     public float FractalPower = 1f;
-    [Range(0f, 10f)]
+    [Range(0.0001f, 0.1f), Tooltip("The small number to use as how close to try to get to the surface for each ray. Smaller number results in more surface detail at the expense of more render time.")]
+    public float Epsilon = 0.0001f;
+    [Range(1f, 10f), Tooltip("The maximum distance to send a ray. Surfaces beyond this distance will not be rendered.")]
+    public float MaxDistance = 5f;
+    [Range(1, 500), Tooltip("The maximum number of steps for the raymarcher to iterate through.")]
+    public int MaxSteps = 500;
+    [Range(0f, 10f), Tooltip("The distance where fog will start to affect the color of the surface.")]
     public float FogDistance = 3f;
-    [Range(0f, 50f)]
-    public float LightIntensity = 2f;
-    [ColorUsage(false, false)]
+    [Range(0f, 50f), Tooltip("The intensity of the main light source. Higher values lead to higher contrast between light and dark surfaces.")]
+    public float LightIntensity = 7f;
+    [ColorUsage(false, false), Tooltip("The color of the background at infinite distance behind rendered surface.")]
     public Color BackgroundColor;
-    [ColorUsage(false, false)]
+    [ColorUsage(false, false), Tooltip("The color of the glow around the edges of the rendered surface.")]
     public Color GlowColor;
-    [ColorUsage(false, false)]
+    [ColorUsage(false, false), Tooltip("The color of the main light source.")]
     public Color LightColor;
     public enum ColorChannel
     {
@@ -34,27 +48,30 @@ public class RaymarchController : MonoBehaviour
         B
     }
     public ColorChannel AmbientColorChannel = ColorChannel.R;
-    [Range(0f, 1f)]
-    public float AmbientColorRotationAmount = 0.1f;
-    [Range(0f, 1f)]
-    public float AmbientColorMaxChannelAmount = 0.15f;
-    [ColorUsage(false, false)]
+    [Range(0f, 1f), Tooltip("The rate of change in the hue of the ambient color over time.")]
+    public float AmbientColorRotationAmount = 0.5f;
+    [Range(0f, 1f), Tooltip("The maximum saturation of the ambient color.")]
+    public float AmbientColorMaxChannelAmount = 1f;
+    [ColorUsage(false, false), Tooltip("The starting ambient color.")]
     public Color AmbientColor;
+    [Tooltip("The gradient for the diffuse color of the surface.")]
     public Texture2D DiffuseColorGradient;
-    [ColorUsage(false, false)]
+    [ColorUsage(false, false), Tooltip("The color of the specular highlights.")]
     public Color SpecularColor;
-    [Range(0.01f, 10f)]
+    [Range(0.01f, 10f), Tooltip("The shininess of the surface, the lower the value the wider the specular highlights on the surface.")]
     public float Shininess = 10f;
-    [Range(0f, 1f)]
-    public float ShadowMin = 0.05f;
-    [Range(0f, 0.002f)]
-    public float ShadowDistance = 0.001f;
-    [Range(1, 250)]
-    public int AOStepLimit = 150;
+    [Range(0f, 1f), Tooltip("The minimum brightness of the direct shadows. Lower numbers make darker shadows.")]
+    public float ShadowMin = 0.1f;
+    [Range(0f, 0.002f), Tooltip("The largest minimum distance to use in the ratio for calculating the softness of the shadows.")]
+    public float ShadowDistance = 0.002f;
+    [Range(1, 250), Tooltip("The max steps to use in calculating the darkness applied from ambient occlusion.")]
+    public int AOStepLimit = 60;
+    [Range(1, 250), Tooltip("The max steps to use in calculating the amount of glow to add.")]
+    public int GlowStepLimit = 60;
 
 
     /// <summary>
-    /// 
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
     private void Awake()
     {
@@ -72,11 +89,10 @@ public class RaymarchController : MonoBehaviour
             this.Screen = GameObject.Find("Screen").GetComponent<RawImage>();
         }
         this.InitializeRenderTexture();
-        this.Screen.texture = this.RenderTex;
     }
 
     /// <summary>
-    /// 
+    /// Update is called every frame.
     /// </summary>
     private void Update()
     {
@@ -103,16 +119,22 @@ public class RaymarchController : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Updates the parameters of the compute shader.
     /// </summary>
     private void SetComputeShaderParameters()
     {
         this.RaymarchShader.SetTexture(0, "destination", this.RenderTex);
+
         this.RaymarchShader.SetMatrix("cameraToWorld", this.Cam.cameraToWorldMatrix);
         this.RaymarchShader.SetMatrix("cameraInverseProjection", this.Cam.projectionMatrix.inverse);
         this.RaymarchShader.SetVector("viewDirection", this.Cam.transform.forward);
         this.RaymarchShader.SetVector("lightDirection", this.MainLight.transform.forward);
+
         this.RaymarchShader.SetFloat("power", Mathf.Max(this.FractalPower, 1.01f));
+        this.RaymarchShader.SetFloat("epsilon", this.Epsilon);
+        this.RaymarchShader.SetFloat("maxDistance", this.MaxDistance);
+        this.RaymarchShader.SetInt("maxSteps", this.MaxSteps);
+
         this.RaymarchShader.SetFloat("fogDistance", this.FogDistance);
         this.RaymarchShader.SetFloat("lightIntensity", this.LightIntensity);
         this.RaymarchShader.SetVector("backgroundColor", this.BackgroundColor);
@@ -126,10 +148,11 @@ public class RaymarchController : MonoBehaviour
         this.RaymarchShader.SetFloat("shadowMin", this.ShadowMin);
         this.RaymarchShader.SetFloat("shadowDistance", this.ShadowDistance);
         this.RaymarchShader.SetInt("aoStepLimit", this.AOStepLimit);
+        this.RaymarchShader.SetInt("glowStepLimit", this.GlowStepLimit);
     }
 
     /// <summary>
-    /// 
+    /// Initializes the render texture.
     /// </summary>
     private void InitializeRenderTexture()
     {
@@ -144,11 +167,12 @@ public class RaymarchController : MonoBehaviour
                 enableRandomWrite = true
             };
             this.RenderTex.Create();
+            this.Screen.texture = this.RenderTex;
         }
     }
 
     /// <summary>
-    /// 
+    /// Rotates the hue of the ambient color used to light the surface over time. Goes around the color wheel > Red, Purple, Blue, Teal, Green, Yellow, Orange, Red...
     /// </summary>
     private void RotateAmbientColor()
     {

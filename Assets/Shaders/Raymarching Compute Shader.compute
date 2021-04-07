@@ -8,6 +8,10 @@ float3 viewDirection;
 float3 lightDirection;
 
 float power;
+float epsilon;
+float maxDistance;
+int maxSteps;
+
 float fogDistance;
 float lightIntensity;
 float4 backgroundColor;
@@ -21,18 +25,17 @@ float shininess;
 float shadowMin;
 float shadowDistance;
 int aoStepLimit;
+int glowStepLimit;
 
-static const float epsilon = 0.001f;
-static const float maxDistance = 5;
-static const int maxSteps = 250;
 
+// Contains ray data.
 struct Ray
 {
     float3 origin;
     float3 direction;
 };
 
-
+// Creates a ray from the given origin and direction.
 Ray CreateRay(float3 origin, float3 direction)
 {
     Ray ray;
@@ -41,6 +44,7 @@ Ray CreateRay(float3 origin, float3 direction)
     return ray;
 }
 
+// Creates a camera ray for the given UV coords.
 Ray CreateCameraRay(float2 uv)
 {
     float3 origin = mul(cameraToWorld, float4(0, 0, 0, 1)).xyz;
@@ -50,6 +54,7 @@ Ray CreateCameraRay(float2 uv)
     return CreateRay(origin, direction);
 }
 
+// Gets an estimate of the distance to the surface from a given point.
 // Mandelbulb distanceFromSurface estimation:
 // http://blog.hvidtfeldts.net/index.php/2011/09/distanceFromSurface-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
 float2 DistanceEstimate(float3 pos)
@@ -82,6 +87,7 @@ float2 DistanceEstimate(float3 pos)
 	return float2(iterations, distanceFromSurface);
 }
 
+// Estimates the normal of the surface by getting distance estimate from nearby points and normalizing.
 float3 EstimateNormal(float3 pos)
 {
     float x = DistanceEstimate(float3(pos.x + epsilon, pos.y, pos.z)).y - DistanceEstimate(float3(pos.x - epsilon, pos.y, pos.z)).y;
@@ -90,6 +96,7 @@ float3 EstimateNormal(float3 pos)
     return normalize(float3(x, y, z));
 }
 
+// Shades the surface with blinn phong lighting.
 float4 BlinnPhongLighting(float3 normal, float iterations)
 {
     float lambertian = saturate(dot(normal, -lightDirection));
@@ -101,11 +108,11 @@ float4 BlinnPhongLighting(float3 normal, float iterations)
         specular = pow(specAngle, shininess);
     }
     float4 diffuseColor = diffuseColorGradient.SampleLevel(samplerdiffuseColorGradient, float2(saturate(iterations / 15.0), 0.0), 0);
-    float4 color = ambientColor + diffuseColor * lambertian * lightColor * lightIntensity +
-                                  specularColor * specular * lightColor * lightIntensity;
+    float4 color = ambientColor + diffuseColor * lambertian * lightColor * lightIntensity + specularColor * specular * lightColor * lightIntensity;
     return float4(color.rgb, 1);
 }
 
+// Calculates the shadow amount.
 float SoftShadow(Ray ray)
 {
     float shadowAmount = 0;
@@ -113,7 +120,7 @@ float SoftShadow(Ray ray)
     int steps = 0;
     float smallestDistanceFromSurface = 100;
     bool hitSurface = false;
-    while (totalRayDistance < maxDistance && steps < maxSteps)
+    while(totalRayDistance < maxDistance && steps < maxSteps)
     {
         steps++;
         float2 sceneInfo = DistanceEstimate(ray.origin);
@@ -122,7 +129,7 @@ float SoftShadow(Ray ray)
         {
             smallestDistanceFromSurface = distanceFromSurface;
         }
-        if (distanceFromSurface <= epsilon)
+        if(distanceFromSurface <= epsilon)
         {
             hitSurface = true;
             shadowAmount = 1;
@@ -138,7 +145,7 @@ float SoftShadow(Ray ray)
     return 1 - shadowAmount;
 }
 
-
+// Main computer shader thread.
 [numthreads(8,8,1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
@@ -183,7 +190,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     if(hitSurface == false)
     {
         // Glow/Edge lighting
-        color = lerp(color, glowColor, float(steps) / float(maxSteps));
+        color = lerp(color, glowColor, saturate(float(steps) / float(glowStepLimit)));
     }
     destination[id.xy] = float4(color.rgb, 1);
 }

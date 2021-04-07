@@ -43,7 +43,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""TogglePower"",
+                    ""name"": ""TogglePowerAddition"",
                     ""type"": ""Button"",
                     ""id"": ""fab8df28-5745-4416-bbf7-fdb0030b35d2"",
                     ""expectedControlType"": ""Button"",
@@ -51,10 +51,34 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Acceleration"",
+                    ""name"": ""ChangePowerAddRate"",
                     ""type"": ""Value"",
                     ""id"": ""f1709c36-4c46-4a5a-ad3f-0ebdba537a96"",
                     ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ResetSpeed"",
+                    ""type"": ""Button"",
+                    ""id"": ""01203ed0-12d2-4da7-a236-e63436460a7a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ResetPower"",
+                    ""type"": ""Button"",
+                    ""id"": ""232e74db-7104-44db-9136-6d4ba69e51b6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""b0bcab30-0635-4317-a1ff-a94e02011860"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -149,7 +173,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""TogglePower"",
+                    ""action"": ""TogglePowerAddition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -160,7 +184,7 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Acceleration"",
+                    ""action"": ""ChangePowerAddRate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -196,6 +220,39 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""DEBUGUNHOOKINPUT"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea54552f-1e98-4ab2-aaad-f7e17364cec4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ResetSpeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c828be2b-606e-4ae0-996c-d70a6c1c98af"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ResetPower"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72f052f8-bd03-4350-9717-ebfe7cb419c5"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ToggleUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -224,8 +281,11 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_Main_Movement = m_Main.FindAction("Movement", throwIfNotFound: true);
         m_Main_Aim = m_Main.FindAction("Aim", throwIfNotFound: true);
         m_Main_Sprint = m_Main.FindAction("Sprint", throwIfNotFound: true);
-        m_Main_TogglePower = m_Main.FindAction("TogglePower", throwIfNotFound: true);
-        m_Main_Acceleration = m_Main.FindAction("Acceleration", throwIfNotFound: true);
+        m_Main_TogglePowerAddition = m_Main.FindAction("TogglePowerAddition", throwIfNotFound: true);
+        m_Main_ChangePowerAddRate = m_Main.FindAction("ChangePowerAddRate", throwIfNotFound: true);
+        m_Main_ResetSpeed = m_Main.FindAction("ResetSpeed", throwIfNotFound: true);
+        m_Main_ResetPower = m_Main.FindAction("ResetPower", throwIfNotFound: true);
+        m_Main_ToggleUI = m_Main.FindAction("ToggleUI", throwIfNotFound: true);
         m_Main_Exit = m_Main.FindAction("Exit", throwIfNotFound: true);
         m_Main_DEBUGUNHOOKINPUT = m_Main.FindAction("DEBUGUNHOOKINPUT", throwIfNotFound: true);
     }
@@ -280,8 +340,11 @@ public class @InputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Main_Movement;
     private readonly InputAction m_Main_Aim;
     private readonly InputAction m_Main_Sprint;
-    private readonly InputAction m_Main_TogglePower;
-    private readonly InputAction m_Main_Acceleration;
+    private readonly InputAction m_Main_TogglePowerAddition;
+    private readonly InputAction m_Main_ChangePowerAddRate;
+    private readonly InputAction m_Main_ResetSpeed;
+    private readonly InputAction m_Main_ResetPower;
+    private readonly InputAction m_Main_ToggleUI;
     private readonly InputAction m_Main_Exit;
     private readonly InputAction m_Main_DEBUGUNHOOKINPUT;
     public struct MainActions
@@ -291,8 +354,11 @@ public class @InputActions : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_Main_Movement;
         public InputAction @Aim => m_Wrapper.m_Main_Aim;
         public InputAction @Sprint => m_Wrapper.m_Main_Sprint;
-        public InputAction @TogglePower => m_Wrapper.m_Main_TogglePower;
-        public InputAction @Acceleration => m_Wrapper.m_Main_Acceleration;
+        public InputAction @TogglePowerAddition => m_Wrapper.m_Main_TogglePowerAddition;
+        public InputAction @ChangePowerAddRate => m_Wrapper.m_Main_ChangePowerAddRate;
+        public InputAction @ResetSpeed => m_Wrapper.m_Main_ResetSpeed;
+        public InputAction @ResetPower => m_Wrapper.m_Main_ResetPower;
+        public InputAction @ToggleUI => m_Wrapper.m_Main_ToggleUI;
         public InputAction @Exit => m_Wrapper.m_Main_Exit;
         public InputAction @DEBUGUNHOOKINPUT => m_Wrapper.m_Main_DEBUGUNHOOKINPUT;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
@@ -313,12 +379,21 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Sprint.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
-                @TogglePower.started -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePower;
-                @TogglePower.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePower;
-                @TogglePower.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePower;
-                @Acceleration.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAcceleration;
-                @Acceleration.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAcceleration;
-                @Acceleration.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAcceleration;
+                @TogglePowerAddition.started -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
+                @TogglePowerAddition.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
+                @TogglePowerAddition.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
+                @ChangePowerAddRate.started -= m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
+                @ChangePowerAddRate.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
+                @ChangePowerAddRate.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
+                @ResetSpeed.started -= m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
+                @ResetSpeed.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
+                @ResetSpeed.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
+                @ResetPower.started -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                @ResetPower.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                @ResetPower.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                @ToggleUI.started -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
+                @ToggleUI.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
+                @ToggleUI.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
                 @Exit.started -= m_Wrapper.m_MainActionsCallbackInterface.OnExit;
                 @Exit.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnExit;
                 @Exit.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnExit;
@@ -338,12 +413,21 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
-                @TogglePower.started += instance.OnTogglePower;
-                @TogglePower.performed += instance.OnTogglePower;
-                @TogglePower.canceled += instance.OnTogglePower;
-                @Acceleration.started += instance.OnAcceleration;
-                @Acceleration.performed += instance.OnAcceleration;
-                @Acceleration.canceled += instance.OnAcceleration;
+                @TogglePowerAddition.started += instance.OnTogglePowerAddition;
+                @TogglePowerAddition.performed += instance.OnTogglePowerAddition;
+                @TogglePowerAddition.canceled += instance.OnTogglePowerAddition;
+                @ChangePowerAddRate.started += instance.OnChangePowerAddRate;
+                @ChangePowerAddRate.performed += instance.OnChangePowerAddRate;
+                @ChangePowerAddRate.canceled += instance.OnChangePowerAddRate;
+                @ResetSpeed.started += instance.OnResetSpeed;
+                @ResetSpeed.performed += instance.OnResetSpeed;
+                @ResetSpeed.canceled += instance.OnResetSpeed;
+                @ResetPower.started += instance.OnResetPower;
+                @ResetPower.performed += instance.OnResetPower;
+                @ResetPower.canceled += instance.OnResetPower;
+                @ToggleUI.started += instance.OnToggleUI;
+                @ToggleUI.performed += instance.OnToggleUI;
+                @ToggleUI.canceled += instance.OnToggleUI;
                 @Exit.started += instance.OnExit;
                 @Exit.performed += instance.OnExit;
                 @Exit.canceled += instance.OnExit;
@@ -368,8 +452,11 @@ public class @InputActions : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnTogglePower(InputAction.CallbackContext context);
-        void OnAcceleration(InputAction.CallbackContext context);
+        void OnTogglePowerAddition(InputAction.CallbackContext context);
+        void OnChangePowerAddRate(InputAction.CallbackContext context);
+        void OnResetSpeed(InputAction.CallbackContext context);
+        void OnResetPower(InputAction.CallbackContext context);
+        void OnToggleUI(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
         void OnDEBUGUNHOOKINPUT(InputAction.CallbackContext context);
     }
