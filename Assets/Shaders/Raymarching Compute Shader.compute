@@ -27,6 +27,8 @@ float shadowDistance;
 int aoStepLimit;
 int glowStepLimit;
 
+float colorDistanceRatio;
+
 
 // Contains ray data.
 struct Ray
@@ -57,7 +59,7 @@ Ray CreateCameraRay(float2 uv)
 // Gets an estimate of the distance to the surface from a given point.
 // Mandelbulb distanceFromSurface estimation:
 // http://blog.hvidtfeldts.net/index.php/2011/09/distanceFromSurface-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
-float2 DistanceEstimate(float3 pos)
+float3 DistanceEstimate(float3 pos)
 {
     float3 z = pos;
 	float dr = 1.0;
@@ -83,8 +85,9 @@ float2 DistanceEstimate(float3 pos)
 		z = zr * float3(sin(theta) * cos(phi), sin(phi) * sin(theta), cos(theta));
 		z += pos;
 	}
+    float traversed = length(z);
     float distanceFromSurface = 0.5 * log(r) * r / dr;
-	return float2(iterations, distanceFromSurface);
+	return float3(iterations, distanceFromSurface, traversed);
 }
 
 // Estimates the normal of the surface by getting distance estimate from nearby points and normalizing.
@@ -97,7 +100,7 @@ float3 EstimateNormal(float3 pos)
 }
 
 // Shades the surface with blinn phong lighting.
-float4 BlinnPhongLighting(float3 normal, float iterations)
+float4 BlinnPhongLighting(float3 normal, float traversed)
 {
     float lambertian = saturate(dot(normal, -lightDirection));
     float specular = 0.0;
@@ -107,7 +110,7 @@ float4 BlinnPhongLighting(float3 normal, float iterations)
         float specAngle = saturate(dot(halfDir, normal));
         specular = pow(specAngle, shininess);
     }
-    float4 diffuseColor = diffuseColorGradient.SampleLevel(samplerdiffuseColorGradient, float2(saturate(iterations / 15.0), 0.0), 0);
+    float4 diffuseColor = diffuseColorGradient.SampleLevel(samplerdiffuseColorGradient, float2(traversed / colorDistanceRatio, 0.0), 0);
     float4 color = ambientColor + diffuseColor * lambertian * lightColor * lightIntensity + specularColor * specular * lightColor * lightIntensity;
     return float4(color.rgb, 1);
 }
@@ -123,8 +126,8 @@ float SoftShadow(Ray ray)
     while(totalRayDistance < maxDistance && steps < maxSteps)
     {
         steps++;
-        float2 sceneInfo = DistanceEstimate(ray.origin);
-        float distanceFromSurface = sceneInfo.y;
+        float3 distanceInfo = DistanceEstimate(ray.origin);
+        float distanceFromSurface = distanceInfo.y;
         if(distanceFromSurface < smallestDistanceFromSurface)
         {
             smallestDistanceFromSurface = distanceFromSurface;
@@ -163,8 +166,8 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     while(totalRayDistance < maxDistance && steps < maxSteps)
     {
         steps++;
-        float2 sceneInfo = DistanceEstimate(ray.origin);
-        float distanceFromSurface = sceneInfo.y;
+        float3 distanceInfo = DistanceEstimate(ray.origin);
+        float distanceFromSurface = distanceInfo.y;
         // Ray has hit a surface, Color surface
         if(distanceFromSurface <= epsilon)
         {
@@ -172,7 +175,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
             // Normal
             float3 normal = EstimateNormal(ray.origin - ray.direction * epsilon * 2);
             // Diffuse & Specular lighting
-            color = BlinnPhongLighting(normal, sceneInfo.x);
+            color = BlinnPhongLighting(normal, distanceInfo.z);
             // Ambient occlusion
             float aoMultiplier = 1.0 - saturate(float(steps) / float(aoStepLimit));
             color *= aoMultiplier;

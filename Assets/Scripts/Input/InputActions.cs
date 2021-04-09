@@ -35,6 +35,14 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""InvertYAxis"",
+                    ""type"": ""Button"",
+                    ""id"": ""05639d25-3c17-4af6-9d3b-38476a43e24f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Sprint"",
                     ""type"": ""Button"",
                     ""id"": ""400925a9-beb5-487d-b80a-66d4fae409dd"",
@@ -70,6 +78,22 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""name"": ""ResetPower"",
                     ""type"": ""Button"",
                     ""id"": ""232e74db-7104-44db-9136-6d4ba69e51b6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""DecreaseEpsilon"",
+                    ""type"": ""Button"",
+                    ""id"": ""99ca71d7-b499-432e-96df-157ccfae7c59"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""IncreaseEpsilon"",
+                    ""type"": ""Button"",
+                    ""id"": ""51c096ae-a3bc-4282-8a45-122d305278cb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -253,6 +277,39 @@ public class @InputActions : IInputActionCollection, IDisposable
                     ""action"": ""ToggleUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08b93bf4-7b99-4742-aa82-17b563a2c655"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""IncreaseEpsilon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""862c23ab-fd56-481d-9d54-58825e1e543f"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""DecreaseEpsilon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d74e9aac-6383-446a-b068-dc555471e1d3"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""InvertYAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -280,11 +337,14 @@ public class @InputActions : IInputActionCollection, IDisposable
         m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
         m_Main_Movement = m_Main.FindAction("Movement", throwIfNotFound: true);
         m_Main_Aim = m_Main.FindAction("Aim", throwIfNotFound: true);
+        m_Main_InvertYAxis = m_Main.FindAction("InvertYAxis", throwIfNotFound: true);
         m_Main_Sprint = m_Main.FindAction("Sprint", throwIfNotFound: true);
         m_Main_TogglePowerAddition = m_Main.FindAction("TogglePowerAddition", throwIfNotFound: true);
         m_Main_ChangePowerAddRate = m_Main.FindAction("ChangePowerAddRate", throwIfNotFound: true);
         m_Main_ResetSpeed = m_Main.FindAction("ResetSpeed", throwIfNotFound: true);
         m_Main_ResetPower = m_Main.FindAction("ResetPower", throwIfNotFound: true);
+        m_Main_DecreaseEpsilon = m_Main.FindAction("DecreaseEpsilon", throwIfNotFound: true);
+        m_Main_IncreaseEpsilon = m_Main.FindAction("IncreaseEpsilon", throwIfNotFound: true);
         m_Main_ToggleUI = m_Main.FindAction("ToggleUI", throwIfNotFound: true);
         m_Main_Exit = m_Main.FindAction("Exit", throwIfNotFound: true);
         m_Main_DEBUGUNHOOKINPUT = m_Main.FindAction("DEBUGUNHOOKINPUT", throwIfNotFound: true);
@@ -339,11 +399,14 @@ public class @InputActions : IInputActionCollection, IDisposable
     private IMainActions m_MainActionsCallbackInterface;
     private readonly InputAction m_Main_Movement;
     private readonly InputAction m_Main_Aim;
+    private readonly InputAction m_Main_InvertYAxis;
     private readonly InputAction m_Main_Sprint;
     private readonly InputAction m_Main_TogglePowerAddition;
     private readonly InputAction m_Main_ChangePowerAddRate;
     private readonly InputAction m_Main_ResetSpeed;
     private readonly InputAction m_Main_ResetPower;
+    private readonly InputAction m_Main_DecreaseEpsilon;
+    private readonly InputAction m_Main_IncreaseEpsilon;
     private readonly InputAction m_Main_ToggleUI;
     private readonly InputAction m_Main_Exit;
     private readonly InputAction m_Main_DEBUGUNHOOKINPUT;
@@ -353,11 +416,14 @@ public class @InputActions : IInputActionCollection, IDisposable
         public MainActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Main_Movement;
         public InputAction @Aim => m_Wrapper.m_Main_Aim;
+        public InputAction @InvertYAxis => m_Wrapper.m_Main_InvertYAxis;
         public InputAction @Sprint => m_Wrapper.m_Main_Sprint;
         public InputAction @TogglePowerAddition => m_Wrapper.m_Main_TogglePowerAddition;
         public InputAction @ChangePowerAddRate => m_Wrapper.m_Main_ChangePowerAddRate;
         public InputAction @ResetSpeed => m_Wrapper.m_Main_ResetSpeed;
         public InputAction @ResetPower => m_Wrapper.m_Main_ResetPower;
+        public InputAction @DecreaseEpsilon => m_Wrapper.m_Main_DecreaseEpsilon;
+        public InputAction @IncreaseEpsilon => m_Wrapper.m_Main_IncreaseEpsilon;
         public InputAction @ToggleUI => m_Wrapper.m_Main_ToggleUI;
         public InputAction @Exit => m_Wrapper.m_Main_Exit;
         public InputAction @DEBUGUNHOOKINPUT => m_Wrapper.m_Main_DEBUGUNHOOKINPUT;
@@ -376,6 +442,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Aim.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAim;
+                @InvertYAxis.started -= m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
+                @InvertYAxis.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
+                @InvertYAxis.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
                 @Sprint.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
@@ -391,6 +460,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @ResetPower.started -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
                 @ResetPower.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
                 @ResetPower.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                @DecreaseEpsilon.started -= m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
+                @DecreaseEpsilon.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
+                @DecreaseEpsilon.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
+                @IncreaseEpsilon.started -= m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
+                @IncreaseEpsilon.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
+                @IncreaseEpsilon.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
                 @ToggleUI.started -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
                 @ToggleUI.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
                 @ToggleUI.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
@@ -410,6 +485,9 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @InvertYAxis.started += instance.OnInvertYAxis;
+                @InvertYAxis.performed += instance.OnInvertYAxis;
+                @InvertYAxis.canceled += instance.OnInvertYAxis;
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
@@ -425,6 +503,12 @@ public class @InputActions : IInputActionCollection, IDisposable
                 @ResetPower.started += instance.OnResetPower;
                 @ResetPower.performed += instance.OnResetPower;
                 @ResetPower.canceled += instance.OnResetPower;
+                @DecreaseEpsilon.started += instance.OnDecreaseEpsilon;
+                @DecreaseEpsilon.performed += instance.OnDecreaseEpsilon;
+                @DecreaseEpsilon.canceled += instance.OnDecreaseEpsilon;
+                @IncreaseEpsilon.started += instance.OnIncreaseEpsilon;
+                @IncreaseEpsilon.performed += instance.OnIncreaseEpsilon;
+                @IncreaseEpsilon.canceled += instance.OnIncreaseEpsilon;
                 @ToggleUI.started += instance.OnToggleUI;
                 @ToggleUI.performed += instance.OnToggleUI;
                 @ToggleUI.canceled += instance.OnToggleUI;
@@ -451,11 +535,14 @@ public class @InputActions : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnInvertYAxis(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnTogglePowerAddition(InputAction.CallbackContext context);
         void OnChangePowerAddRate(InputAction.CallbackContext context);
         void OnResetSpeed(InputAction.CallbackContext context);
         void OnResetPower(InputAction.CallbackContext context);
+        void OnDecreaseEpsilon(InputAction.CallbackContext context);
+        void OnIncreaseEpsilon(InputAction.CallbackContext context);
         void OnToggleUI(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
         void OnDEBUGUNHOOKINPUT(InputAction.CallbackContext context);

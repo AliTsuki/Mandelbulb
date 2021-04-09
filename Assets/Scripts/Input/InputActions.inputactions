@@ -22,6 +22,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "InvertYAxis",
+                    "type": "Button",
+                    "id": "05639d25-3c17-4af6-9d3b-38476a43e24f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Sprint",
                     "type": "Button",
                     "id": "400925a9-beb5-487d-b80a-66d4fae409dd",
@@ -57,6 +65,22 @@
                     "name": "ResetPower",
                     "type": "Button",
                     "id": "232e74db-7104-44db-9136-6d4ba69e51b6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DecreaseEpsilon",
+                    "type": "Button",
+                    "id": "99ca71d7-b499-432e-96df-157ccfae7c59",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "IncreaseEpsilon",
+                    "type": "Button",
+                    "id": "51c096ae-a3bc-4282-8a45-122d305278cb",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -238,6 +262,39 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "ToggleUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08b93bf4-7b99-4742-aa82-17b563a2c655",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "IncreaseEpsilon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "862c23ab-fd56-481d-9d54-58825e1e543f",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "DecreaseEpsilon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d74e9aac-6383-446a-b068-dc555471e1d3",
+                    "path": "<Keyboard>/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "InvertYAxis",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

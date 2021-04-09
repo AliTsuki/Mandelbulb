@@ -61,7 +61,7 @@ public class UIController : MonoBehaviour
                 AvgFPS += fps;
             }
             AvgFPS /= this.recentFPS.Length;
-            this.InfoText.text = $@"Average FPS: {AvgFPS:0}  FPS: {FPS:0}{Environment.NewLine}{Environment.NewLine}Power: {RaymarchController.Instance.FractalPower:0.00}{Environment.NewLine}Speed: {InputController.Instance.PowerChangeSpeed:0.00}";
+            this.InfoText.text = $@"Average FPS: {AvgFPS:0}  FPS: {FPS:0}{Environment.NewLine}{Environment.NewLine}Invert Y Axis: {InputController.Instance.InvertYAxis}{Environment.NewLine}{Environment.NewLine}Speed: {InputController.Instance.PowerChangeSpeed:0.00}{Environment.NewLine}Power: {RaymarchController.Instance.FractalPower:0.00}{Environment.NewLine}{Environment.NewLine}Epsilon: {RaymarchController.Instance.Epsilon:0.#################}";
             this.PlayIcon.gameObject.SetActive(!InputController.Instance.Paused);
             this.PauseIcon.gameObject.SetActive(InputController.Instance.Paused);
         }

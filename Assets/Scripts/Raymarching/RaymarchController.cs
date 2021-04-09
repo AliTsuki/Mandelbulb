@@ -26,11 +26,11 @@ public class RaymarchController : MonoBehaviour
     [Range(1f, 30f), Tooltip("The fractal power. Higher values result in more self similar looking surface.")]
     public float FractalPower = 1f;
     [Range(0.0001f, 0.001f), Tooltip("The small number to use as how close to try to get to the surface for each ray. Smaller number results in more surface detail at the expense of more render time.")]
-    public float Epsilon = 0.0001f;
+    public float Epsilon = 0.001f;
     [Range(1f, 10f), Tooltip("The maximum distance to send a ray. Surfaces beyond this distance will not be rendered.")]
     public float MaxDistance = 5f;
     [Range(1, 500), Tooltip("The maximum number of steps for the raymarcher to iterate through.")]
-    public int MaxSteps = 500;
+    public int MaxSteps = 250;
     [Range(0f, 10f), Tooltip("The distance where fog will start to affect the color of the surface.")]
     public float FogDistance = 3f;
     [Range(0f, 50f), Tooltip("The intensity of the main light source. Higher values lead to higher contrast between light and dark surfaces.")]
@@ -49,9 +49,9 @@ public class RaymarchController : MonoBehaviour
     }
     public ColorChannel AmbientColorChannel = ColorChannel.R;
     [Range(0f, 1f), Tooltip("The rate of change in the hue of the ambient color over time.")]
-    public float AmbientColorRotationAmount = 0.5f;
+    public float AmbientColorRotationAmount = 0.25f;
     [Range(0f, 1f), Tooltip("The maximum saturation of the ambient color.")]
-    public float AmbientColorMaxChannelAmount = 1f;
+    public float AmbientColorMaxChannelAmount = 0.5f;
     [ColorUsage(false, false), Tooltip("The starting ambient color.")]
     public Color AmbientColor;
     [Tooltip("The gradient for the diffuse color of the surface.")]
@@ -65,9 +65,11 @@ public class RaymarchController : MonoBehaviour
     [Range(0f, 0.002f), Tooltip("The largest minimum distance to use in the ratio for calculating the softness of the shadows.")]
     public float ShadowDistance = 0.002f;
     [Range(1, 250), Tooltip("The max steps to use in calculating the darkness applied from ambient occlusion.")]
-    public int AOStepLimit = 60;
+    public int AOStepLimit = 100;
     [Range(1, 250), Tooltip("The max steps to use in calculating the amount of glow to add.")]
-    public int GlowStepLimit = 60;
+    public int GlowStepLimit = 100;
+    [Range(0.01f, 10f)]
+    public float colorDistanceRatio = 1f;
 
 
     /// <summary>
@@ -149,6 +151,8 @@ public class RaymarchController : MonoBehaviour
         this.RaymarchShader.SetFloat("shadowDistance", this.ShadowDistance);
         this.RaymarchShader.SetInt("aoStepLimit", this.AOStepLimit);
         this.RaymarchShader.SetInt("glowStepLimit", this.GlowStepLimit);
+
+        this.RaymarchShader.SetFloat("colorDistanceRatio", this.colorDistanceRatio);
     }
 
     /// <summary>
@@ -226,6 +230,22 @@ public class RaymarchController : MonoBehaviour
                 }
                 break;
             }
+        }
+    }
+
+    /// <summary>
+    /// Increase or decrease epsilon.
+    /// </summary>
+    /// <param name="add">Should epsilon be added to or subtracted from.</param>
+    public void ModifyEpsilon(bool add)
+    {
+        if(add == true)
+        {
+            this.Epsilon += this.Epsilon * 0.1f;
+        }
+        else
+        {
+            this.Epsilon -= this.Epsilon * 0.1f;
         }
     }
 }

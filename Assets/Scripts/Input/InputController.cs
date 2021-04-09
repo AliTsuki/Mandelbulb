@@ -34,13 +34,15 @@ public class InputController : MonoBehaviour
     public float PowerChangeSensitivity = 0.001f;
 
     [Range(0.1f, 1f), Tooltip("The default movement speed.")]
-    public float DefaultMoveSpeed = 0.1f;
+    public float DefaultMoveSpeed = 0.2f;
     [Range(1f, 10f), Tooltip("The multiplier to apply to movement speed when sprinting.")]
-    public float SprintMultiplier = 10.0f;
+    public float SprintMultiplier = 5.0f;
     [Tooltip("The current movement speed.")]
     public float Speed = 0f;
     [Range(0.1f, 2f), Tooltip("The multiplier applied to mouse movements on camera aim.")]
     public float MouseSensitivity = 0.8f;
+    [Tooltip("Should camera Y axis movements be inverted?")]
+    public bool InvertYAxis = true;
 
     [Tooltip("Should inputs be recorded and applied?")]
     public bool RecordInputs = true;
@@ -61,12 +63,15 @@ public class InputController : MonoBehaviour
         this.controls.Main.Movement.canceled += this.Movement_canceled;
         this.controls.Main.Aim.performed += this.Aim_performed;
         this.controls.Main.Aim.canceled += this.Aim_canceled;
+        this.controls.Main.InvertYAxis.performed += this.InvertYAxis_performed;
         this.controls.Main.Sprint.performed += this.Sprint_performed;
         this.controls.Main.Sprint.canceled += this.Sprint_canceled;
         this.controls.Main.TogglePowerAddition.performed += this.TogglePowerAddition_performed;
         this.controls.Main.ChangePowerAddRate.performed += this.ChangePowerAddRate_performed;
         this.controls.Main.ResetSpeed.performed += this.ResetSpeed_performed;
         this.controls.Main.ResetPower.performed += this.ResetPower_performed;
+        this.controls.Main.DecreaseEpsilon.performed += this.DecreaseEpsilon_performed;
+        this.controls.Main.IncreaseEpsilon.performed += this.IncreaseEpsilon_performed;
         this.controls.Main.ToggleUI.performed += this.ToggleUI_performed;
         this.controls.Main.Exit.performed += this.Exit_performed;
         Cursor.visible = false;
@@ -91,7 +96,14 @@ public class InputController : MonoBehaviour
         Vector3 MoveDelta = this.MoveInput * this.Speed * Time.fixedDeltaTime;
         this.Cam.transform.position += (this.Cam.transform.forward * MoveDelta.z) + (this.Cam.transform.right * MoveDelta.x);
         Vector2 AimDelta = this.AimInput * this.MouseSensitivity * Time.fixedDeltaTime;
-        this.Cam.transform.Rotate(AimDelta.y, AimDelta.x, 0f);
+        if(this.InvertYAxis == true)
+        {
+            this.Cam.transform.Rotate(AimDelta.y, AimDelta.x, 0f);
+        }
+        else
+        {
+            this.Cam.transform.Rotate(-AimDelta.y, AimDelta.x, 0f);
+        }
     }
 
     /// <summary>
@@ -139,6 +151,18 @@ public class InputController : MonoBehaviour
         if(this.RecordInputs == true)
         {
             this.AimInput = context.ReadValue<Vector2>();
+        }
+    }
+
+    /// <summary>
+    /// Called when the invert y axis input is performed.
+    /// </summary>
+    /// <param name="context">The data passed by the input.</param>
+    private void InvertYAxis_performed(InputAction.CallbackContext context)
+    {
+        if(this.RecordInputs == true)
+        {
+            this.InvertYAxis = !this.InvertYAxis;
         }
     }
 
@@ -219,6 +243,30 @@ public class InputController : MonoBehaviour
         if(this.RecordInputs == true)
         {
             RaymarchController.Instance.FractalPower = 1f;
+        }
+    }
+
+    /// <summary>
+    /// Called when the decrease epsilon input is performed.
+    /// </summary>
+    /// <param name="context">The data passed by the input.</param>
+    private void DecreaseEpsilon_performed(InputAction.CallbackContext context)
+    {
+        if(this.RecordInputs == true)
+        {
+            RaymarchController.Instance.ModifyEpsilon(false);
+        }
+    }
+
+    /// <summary>
+    /// Called when the increase epsilon input is performed.
+    /// </summary>
+    /// <param name="context">The data passed by the input.</param>
+    private void IncreaseEpsilon_performed(InputAction.CallbackContext context)
+    {
+        if(this.RecordInputs == true)
+        {
+            RaymarchController.Instance.ModifyEpsilon(true);
         }
     }
 
