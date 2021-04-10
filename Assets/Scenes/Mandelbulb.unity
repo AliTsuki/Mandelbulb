@@ -1735,4 +1735,4 @@ MonoBehaviour:
   ShadowDistance: 0.002
   AOStepLimit: 100
   GlowStepLimit: 100
-  colorDistanceRatio: 10
+  colorDistanceRatio: 3

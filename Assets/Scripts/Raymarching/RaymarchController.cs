@@ -69,7 +69,7 @@ public class RaymarchController : MonoBehaviour
     [Range(1, 250), Tooltip("The max steps to use in calculating the amount of glow to add.")]
     public int GlowStepLimit = 100;
     [Range(0.01f, 10f)]
-    public float colorDistanceRatio = 1f;
+    public float colorDistanceRatio = 3f;
 
 
     /// <summary>
