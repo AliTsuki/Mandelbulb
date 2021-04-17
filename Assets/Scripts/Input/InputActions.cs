@@ -11,7 +11,7 @@ public class @InputActions : IInputActionCollection, IDisposable
     public InputActionAsset asset { get; }
     public @InputActions()
     {
-        asset = InputActionAsset.FromJson(@"{
+        this.asset = InputActionAsset.FromJson(@"{
     ""name"": ""InputActions"",
     ""maps"": [
         {
@@ -334,64 +334,64 @@ public class @InputActions : IInputActionCollection, IDisposable
     ]
 }");
         // Main
-        m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
-        m_Main_Movement = m_Main.FindAction("Movement", throwIfNotFound: true);
-        m_Main_Aim = m_Main.FindAction("Aim", throwIfNotFound: true);
-        m_Main_InvertYAxis = m_Main.FindAction("InvertYAxis", throwIfNotFound: true);
-        m_Main_Sprint = m_Main.FindAction("Sprint", throwIfNotFound: true);
-        m_Main_TogglePowerAddition = m_Main.FindAction("TogglePowerAddition", throwIfNotFound: true);
-        m_Main_ChangePowerAddRate = m_Main.FindAction("ChangePowerAddRate", throwIfNotFound: true);
-        m_Main_ResetSpeed = m_Main.FindAction("ResetSpeed", throwIfNotFound: true);
-        m_Main_ResetPower = m_Main.FindAction("ResetPower", throwIfNotFound: true);
-        m_Main_DecreaseEpsilon = m_Main.FindAction("DecreaseEpsilon", throwIfNotFound: true);
-        m_Main_IncreaseEpsilon = m_Main.FindAction("IncreaseEpsilon", throwIfNotFound: true);
-        m_Main_ToggleUI = m_Main.FindAction("ToggleUI", throwIfNotFound: true);
-        m_Main_Exit = m_Main.FindAction("Exit", throwIfNotFound: true);
-        m_Main_DEBUGUNHOOKINPUT = m_Main.FindAction("DEBUGUNHOOKINPUT", throwIfNotFound: true);
+        this.m_Main = this.asset.FindActionMap("Main", throwIfNotFound: true);
+        this.m_Main_Movement = this.m_Main.FindAction("Movement", throwIfNotFound: true);
+        this.m_Main_Aim = this.m_Main.FindAction("Aim", throwIfNotFound: true);
+        this.m_Main_InvertYAxis = this.m_Main.FindAction("InvertYAxis", throwIfNotFound: true);
+        this.m_Main_Sprint = this.m_Main.FindAction("Sprint", throwIfNotFound: true);
+        this.m_Main_TogglePowerAddition = this.m_Main.FindAction("TogglePowerAddition", throwIfNotFound: true);
+        this.m_Main_ChangePowerAddRate = this.m_Main.FindAction("ChangePowerAddRate", throwIfNotFound: true);
+        this.m_Main_ResetSpeed = this.m_Main.FindAction("ResetSpeed", throwIfNotFound: true);
+        this.m_Main_ResetPower = this.m_Main.FindAction("ResetPower", throwIfNotFound: true);
+        this.m_Main_DecreaseEpsilon = this.m_Main.FindAction("DecreaseEpsilon", throwIfNotFound: true);
+        this.m_Main_IncreaseEpsilon = this.m_Main.FindAction("IncreaseEpsilon", throwIfNotFound: true);
+        this.m_Main_ToggleUI = this.m_Main.FindAction("ToggleUI", throwIfNotFound: true);
+        this.m_Main_Exit = this.m_Main.FindAction("Exit", throwIfNotFound: true);
+        this.m_Main_DEBUGUNHOOKINPUT = this.m_Main.FindAction("DEBUGUNHOOKINPUT", throwIfNotFound: true);
     }
 
     public void Dispose()
     {
-        UnityEngine.Object.Destroy(asset);
+        UnityEngine.Object.Destroy(this.asset);
     }
 
     public InputBinding? bindingMask
     {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
+        get => this.asset.bindingMask;
+        set => this.asset.bindingMask = value;
     }
 
     public ReadOnlyArray<InputDevice>? devices
     {
-        get => asset.devices;
-        set => asset.devices = value;
+        get => this.asset.devices;
+        set => this.asset.devices = value;
     }
 
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+    public ReadOnlyArray<InputControlScheme> controlSchemes => this.asset.controlSchemes;
 
     public bool Contains(InputAction action)
     {
-        return asset.Contains(action);
+        return this.asset.Contains(action);
     }
 
     public IEnumerator<InputAction> GetEnumerator()
     {
-        return asset.GetEnumerator();
+        return this.asset.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return GetEnumerator();
+        return this.GetEnumerator();
     }
 
     public void Enable()
     {
-        asset.Enable();
+        this.asset.Enable();
     }
 
     public void Disable()
     {
-        asset.Disable();
+        this.asset.Disable();
     }
 
     // Main
@@ -413,111 +413,111 @@ public class @InputActions : IInputActionCollection, IDisposable
     public struct MainActions
     {
         private @InputActions m_Wrapper;
-        public MainActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Main_Movement;
-        public InputAction @Aim => m_Wrapper.m_Main_Aim;
-        public InputAction @InvertYAxis => m_Wrapper.m_Main_InvertYAxis;
-        public InputAction @Sprint => m_Wrapper.m_Main_Sprint;
-        public InputAction @TogglePowerAddition => m_Wrapper.m_Main_TogglePowerAddition;
-        public InputAction @ChangePowerAddRate => m_Wrapper.m_Main_ChangePowerAddRate;
-        public InputAction @ResetSpeed => m_Wrapper.m_Main_ResetSpeed;
-        public InputAction @ResetPower => m_Wrapper.m_Main_ResetPower;
-        public InputAction @DecreaseEpsilon => m_Wrapper.m_Main_DecreaseEpsilon;
-        public InputAction @IncreaseEpsilon => m_Wrapper.m_Main_IncreaseEpsilon;
-        public InputAction @ToggleUI => m_Wrapper.m_Main_ToggleUI;
-        public InputAction @Exit => m_Wrapper.m_Main_Exit;
-        public InputAction @DEBUGUNHOOKINPUT => m_Wrapper.m_Main_DEBUGUNHOOKINPUT;
-        public InputActionMap Get() { return m_Wrapper.m_Main; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
+        public MainActions(@InputActions wrapper) { this.m_Wrapper = wrapper; }
+        public InputAction @Movement => this.m_Wrapper.m_Main_Movement;
+        public InputAction @Aim => this.m_Wrapper.m_Main_Aim;
+        public InputAction @InvertYAxis => this.m_Wrapper.m_Main_InvertYAxis;
+        public InputAction @Sprint => this.m_Wrapper.m_Main_Sprint;
+        public InputAction @TogglePowerAddition => this.m_Wrapper.m_Main_TogglePowerAddition;
+        public InputAction @ChangePowerAddRate => this.m_Wrapper.m_Main_ChangePowerAddRate;
+        public InputAction @ResetSpeed => this.m_Wrapper.m_Main_ResetSpeed;
+        public InputAction @ResetPower => this.m_Wrapper.m_Main_ResetPower;
+        public InputAction @DecreaseEpsilon => this.m_Wrapper.m_Main_DecreaseEpsilon;
+        public InputAction @IncreaseEpsilon => this.m_Wrapper.m_Main_IncreaseEpsilon;
+        public InputAction @ToggleUI => this.m_Wrapper.m_Main_ToggleUI;
+        public InputAction @Exit => this.m_Wrapper.m_Main_Exit;
+        public InputAction @DEBUGUNHOOKINPUT => this.m_Wrapper.m_Main_DEBUGUNHOOKINPUT;
+        public InputActionMap Get() { return this.m_Wrapper.m_Main; }
+        public void Enable() { this.Get().Enable(); }
+        public void Disable() { this.Get().Disable(); }
+        public bool enabled => this.Get().enabled;
         public static implicit operator InputActionMap(MainActions set) { return set.Get(); }
         public void SetCallbacks(IMainActions instance)
         {
-            if (m_Wrapper.m_MainActionsCallbackInterface != null)
+            if (this.m_Wrapper.m_MainActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMovement;
-                @Aim.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAim;
-                @Aim.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAim;
-                @Aim.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAim;
-                @InvertYAxis.started -= m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
-                @InvertYAxis.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
-                @InvertYAxis.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
-                @Sprint.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
-                @Sprint.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
-                @Sprint.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
-                @TogglePowerAddition.started -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
-                @TogglePowerAddition.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
-                @TogglePowerAddition.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
-                @ChangePowerAddRate.started -= m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
-                @ChangePowerAddRate.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
-                @ChangePowerAddRate.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
-                @ResetSpeed.started -= m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
-                @ResetSpeed.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
-                @ResetSpeed.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
-                @ResetPower.started -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
-                @ResetPower.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
-                @ResetPower.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
-                @DecreaseEpsilon.started -= m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
-                @DecreaseEpsilon.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
-                @DecreaseEpsilon.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
-                @IncreaseEpsilon.started -= m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
-                @IncreaseEpsilon.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
-                @IncreaseEpsilon.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
-                @ToggleUI.started -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
-                @ToggleUI.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
-                @ToggleUI.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
-                @Exit.started -= m_Wrapper.m_MainActionsCallbackInterface.OnExit;
-                @Exit.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnExit;
-                @Exit.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnExit;
-                @DEBUGUNHOOKINPUT.started -= m_Wrapper.m_MainActionsCallbackInterface.OnDEBUGUNHOOKINPUT;
-                @DEBUGUNHOOKINPUT.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnDEBUGUNHOOKINPUT;
-                @DEBUGUNHOOKINPUT.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnDEBUGUNHOOKINPUT;
+                this.@Movement.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnMovement;
+                this.@Movement.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnMovement;
+                this.@Movement.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnMovement;
+                this.@Aim.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnAim;
+                this.@Aim.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnAim;
+                this.@Aim.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnAim;
+                this.@InvertYAxis.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
+                this.@InvertYAxis.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
+                this.@InvertYAxis.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnInvertYAxis;
+                this.@Sprint.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
+                this.@Sprint.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
+                this.@Sprint.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnSprint;
+                this.@TogglePowerAddition.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
+                this.@TogglePowerAddition.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
+                this.@TogglePowerAddition.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnTogglePowerAddition;
+                this.@ChangePowerAddRate.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
+                this.@ChangePowerAddRate.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
+                this.@ChangePowerAddRate.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnChangePowerAddRate;
+                this.@ResetSpeed.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
+                this.@ResetSpeed.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
+                this.@ResetSpeed.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnResetSpeed;
+                this.@ResetPower.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                this.@ResetPower.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                this.@ResetPower.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnResetPower;
+                this.@DecreaseEpsilon.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
+                this.@DecreaseEpsilon.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
+                this.@DecreaseEpsilon.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnDecreaseEpsilon;
+                this.@IncreaseEpsilon.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
+                this.@IncreaseEpsilon.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
+                this.@IncreaseEpsilon.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnIncreaseEpsilon;
+                this.@ToggleUI.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
+                this.@ToggleUI.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
+                this.@ToggleUI.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnToggleUI;
+                this.@Exit.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnExit;
+                this.@Exit.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnExit;
+                this.@Exit.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnExit;
+                this.@DEBUGUNHOOKINPUT.started -= this.m_Wrapper.m_MainActionsCallbackInterface.OnDEBUGUNHOOKINPUT;
+                this.@DEBUGUNHOOKINPUT.performed -= this.m_Wrapper.m_MainActionsCallbackInterface.OnDEBUGUNHOOKINPUT;
+                this.@DEBUGUNHOOKINPUT.canceled -= this.m_Wrapper.m_MainActionsCallbackInterface.OnDEBUGUNHOOKINPUT;
             }
-            m_Wrapper.m_MainActionsCallbackInterface = instance;
+            this.m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Movement.started += instance.OnMovement;
-                @Movement.performed += instance.OnMovement;
-                @Movement.canceled += instance.OnMovement;
-                @Aim.started += instance.OnAim;
-                @Aim.performed += instance.OnAim;
-                @Aim.canceled += instance.OnAim;
-                @InvertYAxis.started += instance.OnInvertYAxis;
-                @InvertYAxis.performed += instance.OnInvertYAxis;
-                @InvertYAxis.canceled += instance.OnInvertYAxis;
-                @Sprint.started += instance.OnSprint;
-                @Sprint.performed += instance.OnSprint;
-                @Sprint.canceled += instance.OnSprint;
-                @TogglePowerAddition.started += instance.OnTogglePowerAddition;
-                @TogglePowerAddition.performed += instance.OnTogglePowerAddition;
-                @TogglePowerAddition.canceled += instance.OnTogglePowerAddition;
-                @ChangePowerAddRate.started += instance.OnChangePowerAddRate;
-                @ChangePowerAddRate.performed += instance.OnChangePowerAddRate;
-                @ChangePowerAddRate.canceled += instance.OnChangePowerAddRate;
-                @ResetSpeed.started += instance.OnResetSpeed;
-                @ResetSpeed.performed += instance.OnResetSpeed;
-                @ResetSpeed.canceled += instance.OnResetSpeed;
-                @ResetPower.started += instance.OnResetPower;
-                @ResetPower.performed += instance.OnResetPower;
-                @ResetPower.canceled += instance.OnResetPower;
-                @DecreaseEpsilon.started += instance.OnDecreaseEpsilon;
-                @DecreaseEpsilon.performed += instance.OnDecreaseEpsilon;
-                @DecreaseEpsilon.canceled += instance.OnDecreaseEpsilon;
-                @IncreaseEpsilon.started += instance.OnIncreaseEpsilon;
-                @IncreaseEpsilon.performed += instance.OnIncreaseEpsilon;
-                @IncreaseEpsilon.canceled += instance.OnIncreaseEpsilon;
-                @ToggleUI.started += instance.OnToggleUI;
-                @ToggleUI.performed += instance.OnToggleUI;
-                @ToggleUI.canceled += instance.OnToggleUI;
-                @Exit.started += instance.OnExit;
-                @Exit.performed += instance.OnExit;
-                @Exit.canceled += instance.OnExit;
-                @DEBUGUNHOOKINPUT.started += instance.OnDEBUGUNHOOKINPUT;
-                @DEBUGUNHOOKINPUT.performed += instance.OnDEBUGUNHOOKINPUT;
-                @DEBUGUNHOOKINPUT.canceled += instance.OnDEBUGUNHOOKINPUT;
+                this.@Movement.started += instance.OnMovement;
+                this.@Movement.performed += instance.OnMovement;
+                this.@Movement.canceled += instance.OnMovement;
+                this.@Aim.started += instance.OnAim;
+                this.@Aim.performed += instance.OnAim;
+                this.@Aim.canceled += instance.OnAim;
+                this.@InvertYAxis.started += instance.OnInvertYAxis;
+                this.@InvertYAxis.performed += instance.OnInvertYAxis;
+                this.@InvertYAxis.canceled += instance.OnInvertYAxis;
+                this.@Sprint.started += instance.OnSprint;
+                this.@Sprint.performed += instance.OnSprint;
+                this.@Sprint.canceled += instance.OnSprint;
+                this.@TogglePowerAddition.started += instance.OnTogglePowerAddition;
+                this.@TogglePowerAddition.performed += instance.OnTogglePowerAddition;
+                this.@TogglePowerAddition.canceled += instance.OnTogglePowerAddition;
+                this.@ChangePowerAddRate.started += instance.OnChangePowerAddRate;
+                this.@ChangePowerAddRate.performed += instance.OnChangePowerAddRate;
+                this.@ChangePowerAddRate.canceled += instance.OnChangePowerAddRate;
+                this.@ResetSpeed.started += instance.OnResetSpeed;
+                this.@ResetSpeed.performed += instance.OnResetSpeed;
+                this.@ResetSpeed.canceled += instance.OnResetSpeed;
+                this.@ResetPower.started += instance.OnResetPower;
+                this.@ResetPower.performed += instance.OnResetPower;
+                this.@ResetPower.canceled += instance.OnResetPower;
+                this.@DecreaseEpsilon.started += instance.OnDecreaseEpsilon;
+                this.@DecreaseEpsilon.performed += instance.OnDecreaseEpsilon;
+                this.@DecreaseEpsilon.canceled += instance.OnDecreaseEpsilon;
+                this.@IncreaseEpsilon.started += instance.OnIncreaseEpsilon;
+                this.@IncreaseEpsilon.performed += instance.OnIncreaseEpsilon;
+                this.@IncreaseEpsilon.canceled += instance.OnIncreaseEpsilon;
+                this.@ToggleUI.started += instance.OnToggleUI;
+                this.@ToggleUI.performed += instance.OnToggleUI;
+                this.@ToggleUI.canceled += instance.OnToggleUI;
+                this.@Exit.started += instance.OnExit;
+                this.@Exit.performed += instance.OnExit;
+                this.@Exit.canceled += instance.OnExit;
+                this.@DEBUGUNHOOKINPUT.started += instance.OnDEBUGUNHOOKINPUT;
+                this.@DEBUGUNHOOKINPUT.performed += instance.OnDEBUGUNHOOKINPUT;
+                this.@DEBUGUNHOOKINPUT.canceled += instance.OnDEBUGUNHOOKINPUT;
             }
         }
     }
@@ -527,8 +527,12 @@ public class @InputActions : IInputActionCollection, IDisposable
     {
         get
         {
-            if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("KeyboardMouse");
-            return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
+            if (this.m_KeyboardMouseSchemeIndex == -1)
+            {
+                this.m_KeyboardMouseSchemeIndex = this.asset.FindControlSchemeIndex("KeyboardMouse");
+            }
+
+            return this.asset.controlSchemes[this.m_KeyboardMouseSchemeIndex];
         }
     }
     public interface IMainActions

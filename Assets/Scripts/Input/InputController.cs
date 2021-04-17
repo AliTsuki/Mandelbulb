@@ -290,24 +290,4 @@ public class InputController : MonoBehaviour
     {
         Application.Quit();
     }
-
-    /// <summary>
-    /// Called when the debug unhook input is performed.
-    /// </summary>
-    /// <param name="context">The data passed by the input.</param>
-    private void DebugUnhookInput_performed(InputAction.CallbackContext context)
-    {
-        Cursor.visible = !Cursor.visible;
-        if(Cursor.lockState == CursorLockMode.Locked)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        this.RecordInputs = !this.RecordInputs;
-        this.MoveInput = Vector3.zero;
-        this.AimInput = Vector3.zero;
-    }
 }

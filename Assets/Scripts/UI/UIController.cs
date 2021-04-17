@@ -29,7 +29,7 @@ public class UIController : MonoBehaviour
     [Tooltip("Should the UI be shown?")]
     public bool ShowUI = true;
 
-    private float[] recentFPS = new float[30];
+    private readonly float[] recentFPS = new float[30];
     private int recentFPSCounter = 0;
 
 

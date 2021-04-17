@@ -33,6 +33,7 @@
 *.asset_*
 *.ver
 current_version.asset
+/Assets/Audio/
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
