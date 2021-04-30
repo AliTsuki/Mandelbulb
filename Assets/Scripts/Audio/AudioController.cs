@@ -16,6 +16,8 @@ using UnityEngine;
 /// </summary>
 public class AudioController : MonoBehaviour
 {
+    public static AudioController Instance;
+
     private AudioSource audioSource;
 
     private float[] realTimeSpectrum;
@@ -33,6 +35,17 @@ public class AudioController : MonoBehaviour
     public bool realTimeSamples = false;
     public bool preProcessSamples = true;
 
+    public bool PlayingAudio = false;
+    public float TimeToWait = 3f;
+
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -41,7 +54,7 @@ public class AudioController : MonoBehaviour
     {
         this.audioSource = this.GetComponent<AudioSource>();
         // Process audio as it plays
-        if(this.realTimeSamples)
+        if(this.realTimeSamples == true)
         {
             this.realTimeSpectrum = new float[1024];
             this.realTimeSpectralFluxAnalyzer = new SpectralFluxAnalyzer();
@@ -49,10 +62,10 @@ public class AudioController : MonoBehaviour
             this.sampleRate = AudioSettings.outputSampleRate;
         }
         // Preprocess entire audio file upfront
-        if(this.preProcessSamples)
+        if(this.preProcessSamples == true)
         {
             this.preProcessedSpectralFluxAnalyzer = new SpectralFluxAnalyzer();
-            this.preProcessedPlotController = GameObject.Find("PreprocessedPlot").GetComponent<PlotController>();
+            //this.preProcessedPlotController = GameObject.Find("PreprocessedPlot").GetComponent<PlotController>();
             // Need all audio samples.  If in stereo, samples will return with left and right channels interweaved
             // [L,R,L,R,L,R]
             this.multiChannelSamples = new float[this.audioSource.clip.samples * this.audioSource.clip.channels];
@@ -75,17 +88,31 @@ public class AudioController : MonoBehaviour
     private void Update()
     {
         // Real-time
-        if(this.realTimeSamples)
+        if(this.realTimeSamples == true)
         {
             this.audioSource.GetSpectrumData(this.realTimeSpectrum, 0, FFTWindow.BlackmanHarris);
             this.realTimeSpectralFluxAnalyzer.AnalyzeSpectrum(this.realTimeSpectrum, this.audioSource.time);
             this.realTimePlotController.UpdatePlot(this.realTimeSpectralFluxAnalyzer.spectralFluxSamples);
         }
         // Preprocessed
-        if(this.preProcessSamples)
+        if(this.preProcessSamples == true)
         {
             int indexToPlot = this.GetIndexFromTime(this.audioSource.time) / 1024;
-            this.preProcessedPlotController.UpdatePlot(this.preProcessedSpectralFluxAnalyzer.spectralFluxSamples, indexToPlot);
+            //this.preProcessedPlotController.UpdatePlot(this.preProcessedSpectralFluxAnalyzer.spectralFluxSamples, indexToPlot);
+            if(indexToPlot >= 0 && indexToPlot < this.preProcessedSpectralFluxAnalyzer.spectralFluxSamples.Count)
+            {
+                RaymarchController.Instance.SpectralFluxPeakThisFrame = this.preProcessedSpectralFluxAnalyzer.spectralFluxSamples[indexToPlot].isPeak;
+                RaymarchController.Instance.SpectralFluxThisFrame = this.preProcessedSpectralFluxAnalyzer.spectralFluxSamples[indexToPlot].spectralFlux;
+            }
+        }
+        if(this.TimeToWait > 0f)
+        {
+            this.TimeToWait -= Time.deltaTime;
+        }
+        if(this.PlayingAudio == false && this.TimeToWait <= 0f)
+        {
+            this.audioSource.Play();
+            this.PlayingAudio = true;
         }
     }
 

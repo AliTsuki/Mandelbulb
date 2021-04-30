@@ -242,7 +242,7 @@ public class InputController : MonoBehaviour
     {
         if(this.RecordInputs == true)
         {
-            RaymarchController.Instance.FractalPower = 1f;
+            RaymarchController.Instance.FractalPowerBaseline = 1f;
         }
     }
 

@@ -24,7 +24,19 @@ public class RaymarchController : MonoBehaviour
     public RawImage Screen;
 
     [Range(1f, 30f), Tooltip("The fractal power. Higher values result in more self similar looking surface.")]
+    public float FractalPowerBaseline = 1f;
+    [Tooltip("The current fractal power.")]
     public float FractalPower = 1f;
+    [Tooltip("The current amount to add to fractal power this frame.")]
+    public float FractalPowerAdd = 1f;
+    [Tooltip("Is the audio playing peaking this frame in the spectral flux?")]
+    public bool SpectralFluxPeakThisFrame = false;
+    [Tooltip("The current spectral flux this frame.")]
+    public float SpectralFluxThisFrame = 0f;
+    [Range(0f, 1f), Tooltip("The amount to add to fractal power during peaks.")]
+    public float FractalPowerPeakAddAmount = 0.25f;
+    [Range(0, 1f), Tooltip("The rate to return to baseline after a peak.")]
+    public float FractalPowerPeakLerpDownRate = 0.5f;
     [Range(0.0001f, 0.001f), Tooltip("The small number to use as how close to try to get to the surface for each ray. Smaller number results in more surface detail at the expense of more render time.")]
     public float Epsilon = 0.001f;
     [Range(1f, 10f), Tooltip("The maximum distance to send a ray. Surfaces beyond this distance will not be rendered.")]
@@ -71,6 +83,8 @@ public class RaymarchController : MonoBehaviour
     [Range(0.01f, 10f)]
     public float colorDistanceRatio = 3f;
 
+    private bool forward = true;
+
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -98,11 +112,37 @@ public class RaymarchController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(Application.isPlaying)
+        if(Application.isPlaying == true)
         {
-            if(InputController.Instance.Paused == false)
+            if(this.forward == true)
             {
-                this.FractalPower += InputController.Instance.PowerChangeSpeed * Time.deltaTime;
+                this.FractalPowerBaseline += InputController.Instance.PowerChangeSpeed * Time.deltaTime;
+                if(this.SpectralFluxPeakThisFrame == true)
+                {
+                    this.FractalPowerAdd = this.FractalPowerPeakAddAmount * this.SpectralFluxThisFrame;
+                }
+                else
+                {
+                    this.FractalPowerAdd = Mathf.Lerp(this.FractalPowerAdd, -this.FractalPowerPeakAddAmount, this.FractalPowerPeakLerpDownRate);
+                }
+                this.FractalPower = this.FractalPowerBaseline + this.FractalPowerAdd;
+                if(this.FractalPower > 9f)
+                {
+                    this.forward = false;
+                }
+            }
+            else
+            {
+                this.FractalPowerBaseline -= InputController.Instance.PowerChangeSpeed * Time.deltaTime;
+                if(this.SpectralFluxPeakThisFrame == true)
+                {
+                    this.FractalPowerAdd = -this.FractalPowerPeakAddAmount * this.SpectralFluxThisFrame;
+                }
+                else
+                {
+                    this.FractalPowerAdd = Mathf.Lerp(this.FractalPowerAdd, this.FractalPowerPeakAddAmount, this.FractalPowerPeakLerpDownRate);
+                }
+                this.FractalPower = this.FractalPowerBaseline - this.FractalPowerAdd;
             }
             if(this.FractalPower < 1f)
             {
